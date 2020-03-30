@@ -120,6 +120,8 @@ This very brief analysis attempts to re-create some of their results from the sa
 
 Sourced from the downloads button of https://gis.cdc.gov/grasp/fluview/mortality.html
 
+> "The National Center for Health Statistics (NCHS) collects and disseminates the Nation's official vital statistics. NCHS collects death certificate data from state vital statistics offices for virtually all deaths occurring in the United States. Pneumonia and influenza (P&I) deaths are identified based on ICD-10 multiple cause of death codes."
+
 ```{r loadData}
 dt <- data.table::fread(paste0(myParams$dPath, "/USA-all-data.csv"))
 
@@ -185,6 +187,17 @@ dt <- dt[`PERCENT COMPLETE` == "> 100%"]
 ```
 
 We remove the incomplete data from further analysis.
+
+Check on total number of deaths per season.
+
+```{r sumDeaths}
+t <- dt[, .(Total = dkUtils::tidyNum(sum(totDeaths)),
+            Pneumonia = dkUtils::tidyNum(sum(pneuDeaths)),
+            Influenza = dkUtils::tidyNum(sum(fluDeaths))),
+        keyby = .(SEASON)]
+kableExtra::kable(t, caption = "Sum of deaths by season - do these look sensible?", ) %>%
+  kable_styling()
+```
 
 # All deaths
 
