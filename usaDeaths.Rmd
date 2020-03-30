@@ -199,7 +199,7 @@ kableExtra::kable(t, caption = "Sum of deaths by season - do these look sensible
   kable_styling()
 ```
 
-# All deaths
+# All deaths (all ages)
 
 Figure \@ref(fig:plotAllDeaths) is the one causing the interest. Note that we have set the y axis to start at zero to avoid over-emphasising the slope. Week 10 is roughly:
 
@@ -207,7 +207,9 @@ Figure \@ref(fig:plotAllDeaths) is the one causing the interest. Note that we ha
 dt[WEEK == 10, .(SEASON, WEEK, date)]
 ```
 
-```{r plotAllDeaths, fig.cap="USA recorded deaths by flu season (all deaths)"}
+> Note that there are potential issues with the data. See Section \@ref(conclusions).
+
+```{r plotAllDeaths, fig.cap="USA recorded deaths by flu season (all deaths, all ages)"}
 week10Text <- paste0("Week 10: ", dt[WEEK == 10 & SEASON == "2019-20", (date)])
 addWeek10Label <- function(p){
   p <- p + annotate("text", x = 10.5,
@@ -234,11 +236,11 @@ Figure \@ref(fig:plotlyAllDeaths): interactive version (hover the mouse over a d
 plotly::ggplotly(p)
 ```
 
-# Deaths from pneumonia
+# Deaths from pneumonia (all ages)
 
 Figure \@ref(fig:plotPneuDeaths) is pneumonia deaths. They are trending downwards too.
 
-```{r plotPneuDeaths, fig.cap="USA recorded Pneumonia deaths by flu season"}
+```{r plotPneuDeaths, fig.cap="USA recorded Pneumonia deaths by flu season, all ages"}
 p <- ggplot2::ggplot(dt, aes(y = pneuDeaths, x = WEEK, colour = SEASON, group = SEASON)) +
   geom_point() +
   ylim(0,NA)+
@@ -252,10 +254,11 @@ p
 
 The 'missing' deaths here don't seem to account for the overall total deaths reduction. It seems that pneumonia deaths are not being re-classed as covid since USA covid deaths are not recorded as starting until [after March 10th](https://virusncov.com/covid-statistics/usa). Although it is _possible_ that earlier covid deaths were not recorded as covid _or_ pneuomina (_or_ influenza).
 
-# Deaths from influenza
+# Deaths from influenza (all ages)
+
 Figure \@ref(fig:plotFluDeaths) is influenza deaths. 
 
-```{r plotFluDeaths, fig.cap="USA recorded Influenza deaths by flu season"}
+```{r plotFluDeaths, fig.cap="USA recorded Influenza deaths by flu season, all ages"}
 p <- ggplot2::ggplot(dt, aes(y = fluDeaths, x = WEEK, colour = SEASON, group = SEASON)) +
   geom_point() +
   ylim(0,NA)+
@@ -268,6 +271,16 @@ p
 ```
 
 Yep, 2017-2018 was a [bad flu year in the USA](https://www.cdc.gov/flu/about/season/flu-season-2017-2018.htm)...
+
+# Conclusions {#conclusions}
+
+> The decline in 2020 'all deaths' appears real provided the 2020 data is complete. For more on this question, see:
+
+ * https://twitter.com/SidSanghi/status/1244344193230819328
+
+We can speculate about why and there are many suggestions in the thread sparked by the tweet:
+
+ * https://twitter.com/dweekly/status/1244419047510306817
 
 # Runtime
 
