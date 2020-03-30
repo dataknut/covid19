@@ -1,0 +1,281 @@
+---
+params:
+  title: 'Covid19 Data Explorations'
+  subtitle: 'USA deaths data'
+  authors: 'Ben Anderson (`@dataknut`)'
+title: '`r params$title`'
+subtitle: '`r params$subtitle`'
+author: '`r params$authors`'
+date: 'Last run at: `r Sys.time()`'
+output:
+  bookdown::html_document2:
+    fig_caption: yes
+    code_folding: hide
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+    toc_float: TRUE
+always_allow_html: yes
+bibliography: '`r path.expand("~/bibliography.bib")`'
+---
+
+```{r knitrSetUp, include=FALSE}
+
+# Set knitr options
+knitr::opts_chunk$set(echo = FALSE,          # echo code so reader can see what is happening
+                      warning = FALSE,
+                      message = FALSE,
+                      fig_caption = TRUE,
+                      fig_height = 6,        # default, make it bigger to stretch vertical axis
+                      fig_width = 8,
+                      fig_width = 8,         # full width
+                      tidy = TRUE)           # tidy up code in case echo = TRUE
+
+```
+
+
+```{r codeSetup, include=FALSE}
+
+# Load Packages ----
+rmdLibs <- c("ggplot2",
+             "here",
+            "kableExtra",
+            "lubridate",
+            "plotly",
+            "skimr")
+
+dkUtils::loadLibraries(rmdLibs)
+
+# Adjust knitr options if required
+knitr::opts_chunk$set(echo = TRUE)
+
+
+
+# Parameters ----
+myParams <- list()
+myParams$dPath <- paste0(here::here(), "/data")
+
+# Log compile time:
+myParams$startTime <- proc.time()
+
+# set values for annotations
+myParams$myAlpha <- 0.1
+myParams$vLineAlpha <- 0.4
+myParams$vLineCol <- "#0072B2" # http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
+myParams$myTextSize <- 4
+myParams$rectAlpha <- 0.05
+
+myParams$ldStart <- as.Date("2020-03-23") # not true but...
+myParams$ldStart <- as.Date("2020-04-23") # not true but...
+
+addLockdownDate <- function(p, start, finish){
+  # assumes p has x = obsDate
+  p <- p + annotate("text", x = lubridate::date(start),
+             y = yMax * 0.4, angle = 10,size = myTextSize,
+             label = "UK covid lockdown", hjust = 0)
+  p <- p + annotate("rect", xmin = lubridate::as_date(start),
+             xmax = lubridate::as_date(finish), 
+             ymin = yMin, ymax = yMax, 
+             alpha = rectAlpha, 
+             fill = vLineCol, 
+             colour = vLineCol)
+  return(p)
+}
+
+```
+
+# About
+
+## Contributions
+
+Please note that authorship is alphabetical. Contributions are listed below - see [github](https://github.com/dataknut/covid19/commits/master) for details and who to blame for what :-).
+
+ * Ben Anderson (b.anderson@soton.ac.uk `@dataknut`)
+ * 
+
+## Code
+
+ * https://github.com/dataknut/covid19/commits/master
+ 
+## Making comments
+Free and easy to do. Raise an issue at:
+
+ * https://github.com/dataknut/covid19/issues
+
+# Intro
+
+Exploring covid 19 and related data.
+
+This tweet:
+
+ * https://twitter.com/dweekly/status/1244419047510306817 and the paper it linked to: https://www.dropbox.com/s/2y2gvh2q7axdzz2/COVID-19_UnintendedConsequences.pdf?dl=0
+
+Suggested something strange was happening with overall USA deaths in early 2020.:
+
+![USA deaths plot](https://pbs.twimg.com/media/EUUQVGZUEAEpMsT?format=jpg&name=small)
+
+This very brief analysis attempts to re-create some of their results from the same data.
+
+# Data
+
+Sourced from the downloads button of https://gis.cdc.gov/grasp/fluview/mortality.html
+
+```{r loadData}
+dt <- data.table::fread(paste0(myParams$dPath, "/USA-all-data.csv"))
+
+t <- table(dt$SEASON)
+kableExtra::kable(t, caption = "Seasons used") %>%
+  kable_styling()
+```
+
+Note that the 2020 data is incomplete.
+
+Before we go further we'll convert week numbers (in the data) to standardised dates. This will mean some of the dates for the weeks are not _exactly_ right but it might make for easier plotting.
+
+```{r tidyData}
+# why can't they just be published with dates??
+
+dt[, date := ifelse(SEASON == "2015-16" & WEEK > 39, as.Date("2015-01-01") + lubridate::weeks(WEEK),
+                    NA)]
+dt[, date := ifelse(SEASON == "2015-16" & WEEK < 40, as.Date("2016-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2016-17" & WEEK > 39, as.Date("2016-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2016-17" & WEEK < 40, as.Date("2017-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2017-18" & WEEK > 39, as.Date("2017-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2017-18" & WEEK < 40, as.Date("2018-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2018-19" & WEEK > 39, as.Date("2018-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2018-19" & WEEK < 40, as.Date("2019-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2019-20" & WEEK > 39, as.Date("2019-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := ifelse(SEASON == "2019-20" & WEEK < 40, as.Date("2020-01-01") + lubridate::weeks(WEEK),
+                    date)]
+dt[, date := lubridate::as_date(date)]
+
+# check coding
+# head(dt[WEEK == 1])
+t <- head(dt[WEEK == 1 | WEEK == 52, .(SEASON, WEEK, date)])
+
+kableExtra::kable(t, captopn = "Check we coded the weeks correctly") %>%
+  kable_styling()
+
+# also clean up data where needed
+dt[, totDeaths := as.numeric(gsub(",", "",`TOTAL DEATHS`))] 
+dt[, pneuDeaths := as.numeric(gsub(",", "",`NUM PNEUMONIA DEATHS`))]
+dt[, fluDeaths := as.numeric(gsub(",", "",`NUM INFLUENZA DEATHS`))]
+
+dt$V13 <- NULL
+dt$V14 <- NULL
+dt$V15 <- NULL
+dt$V16 <- NULL
+dt$V17 <- NULL
+dt$V18 <- NULL
+
+skimr::skim(dt)
+tdt <- dt[`PERCENT COMPLETE` != "> 100%"]
+kableExtra::kable(table(tdt$date, tdt$`PERCENT COMPLETE`), caption = "Incomplete data...") %>%
+  kable_styling()
+
+dt <- dt[`PERCENT COMPLETE` == "> 100%"]
+```
+
+We remove the incomplete data from further analysis.
+
+# All deaths
+
+Figure \@ref(fig:plotAllDeaths) is the one causing the interest. Note that we have set the y axis to start at zero to avoid over-emphasising the slope. Week 10 is roughly:
+
+```{r checkWeeks}
+dt[WEEK == 10, .(SEASON, WEEK, date)]
+```
+
+```{r plotAllDeaths, fig.cap="USA recorded deaths by flu season (all deaths)"}
+week10Text <- paste0("Week 10: ", dt[WEEK == 10 & SEASON == "2019-20", (date)])
+addWeek10Label <- function(p){
+  p <- p + annotate("text", x = 10.5,
+             y = yMax * 0.4, angle = 10,size = 3,
+             label = week10Text, hjust = 0)
+  p <- p + geom_vline(xintercept = 10, colour = "#CC79A7", alpha = myParams$vLineAlpha)
+  return(p)
+}
+
+p <- ggplot2::ggplot(dt, aes(y = totDeaths, x = WEEK, colour = SEASON, group = SEASON)) +
+  geom_point() +
+  ylim(0,NA) +
+  labs(x = "Week",
+       y = "Total deaths",
+       caption = "Plot by @dataknut using data from https://gis.cdc.gov/grasp/fluview/mortality.html\nIncomplete data excluded")
+yMax <- max(dt$totDeaths)
+p <- addWeek10Label(p)
+p
+```
+
+Figure \@ref(fig:plotlyAllDeaths): interactive version (hover the mouse over a dot). 
+
+```{r plotlyAllDeaths, fig.cap="USA recorded deaths by flu season (all deaths)"}
+plotly::ggplotly(p)
+```
+
+# Deaths from pneumonia
+
+Figure \@ref(fig:plotPneuDeaths) is pneumonia deaths. They are trending downwards too.
+
+```{r plotPneuDeaths, fig.cap="USA recorded Pneumonia deaths by flu season"}
+p <- ggplot2::ggplot(dt, aes(y = pneuDeaths, x = WEEK, colour = SEASON, group = SEASON)) +
+  geom_point() +
+  ylim(0,NA)+
+  labs(x = "Week",
+       y = "Pneumonia deaths",
+       caption = "Plot by @dataknut using data from https://gis.cdc.gov/grasp/fluview/mortality.html")
+yMax <- max(dt$pneuDeaths)
+p <- addWeek10Label(p)
+p
+```
+
+The 'missing' deaths here don't seem to account for the overall total deaths reduction. It seems that pneumonia deaths are not being re-classed as covid since USA covid deaths are not recorded as starting until [after March 10th](https://virusncov.com/covid-statistics/usa). Although it is _possible_ that earlier covid deaths were not recorded as covid _or_ pneuomina (_or_ influenza).
+
+# Deaths from influenza
+Figure \@ref(fig:plotFluDeaths) is influenza deaths. 
+
+```{r plotFluDeaths, fig.cap="USA recorded Influenza deaths by flu season"}
+p <- ggplot2::ggplot(dt, aes(y = fluDeaths, x = WEEK, colour = SEASON, group = SEASON)) +
+  geom_point() +
+  ylim(0,NA)+
+  labs(x = "Week",
+       y = "Influenza deaths",
+       caption = "Plot by @dataknut using data from https://gis.cdc.gov/grasp/fluview/mortality.html")
+yMax <- max(dt$fluDeaths)
+p <- addWeek10Label(p)
+p
+```
+
+Yep, 2017-2018 was a [bad flu year in the USA](https://www.cdc.gov/flu/about/season/flu-season-2017-2018.htm)...
+
+# Runtime
+
+Report generated using [knitr](https://cran.r-project.org/package=knitr) in [RStudio](http://www.rstudio.com) with `r R.version.string` running on `r R.version$platform` (`r Sys.info()[3]`).
+
+```{r check runtime}
+t <- proc.time() - myParams$startTime
+
+elapsed <- t[[3]]
+```
+
+Analysis completed in `r elapsed` seconds ( `r round(elapsed/60,2)` minutes).
+
+R packages used:
+
+ * data.table - [@data.table]
+ * ggplot2 - [@ggplot2]
+ * here - [@here]
+ * kableExtra - [@kableExtra]
+ * lubridate - [@lubridate]
+ * plotly - [@plotly]
+ * skimr - [@skimr]
+            
+# References
