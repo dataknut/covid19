@@ -26,7 +26,7 @@ But: "The death rate was 25 times higher than in a normal flu epidemic (2.5 per 
    * [228,000](https://www.historic-uk.com/HistoryUK/HistoryofBritain/The-Spanish-Flu-pandemic-of-1918/) deaths
    * weekly death rate approached 100/100,000 (1/1000 = 0.1%) in some areas (Fig S1 in https://www.pnas.org/content/pnas/suppl/2007/04/09/0611071104.DC1/11071SIAppendix.pdf)
    * total mortality 400-800/100,000 (4-8/1000 0.4%-0.8% c.f. Pākehā in NZ)
-   * (not spatially homogeneous)[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2596813/] - urban areas 30-40% higher
+   * [not spatially homogeneous](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2596813/) <- great paper! - urban areas 30-40% higher
    * applying these values to the 2020 UK population of 65 million:
      * 4/1000 (0.4%) -> 260k deaths
      * 8/1000 (0.8%) -> 520k deaths
