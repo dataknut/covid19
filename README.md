@@ -22,7 +22,7 @@ Best viewed at https://dataknut.github.io/covid19/
    * covid19 deaths/million: "our current score of 388 puts (UK/GB?) fourth, behind Belgium (632), Spain (509) and Italy (452)"
    * so for comparison with the flu data below this is 0.038%, 0.063%, 0.051% and 0.045% (for now... but see excellent discussion by [david-spiegelhalter (who else!?)](https://www.theguardian.com/profile/david-spiegelhalter) of what might not be included - [collateral damage](https://www.theguardian.com/commentisfree/2020/apr/30/coronavirus-deaths-how-does-britain-compare-with-other-countries) etc)
  * go to [FT.com - look at excess deaths plots](https://www.ft.com/coronavirus-latest)
- * USA [deaths](usaDeaths.html) - using https://gis.cdc.gov/grasp/fluview/mortality.html
+ * USA [deaths](dataMining/usaDeaths.html) - using https://gis.cdc.gov/grasp/fluview/mortality.html
  * UK deaths - ideally using https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales but there is one xl per year!!
 
 ## Flu 1918 notes
