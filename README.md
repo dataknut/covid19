@@ -11,7 +11,7 @@ Best viewed at https://dataknut.github.io/covid19/
 
 "It is estimated that about 500 million people or one-third of the world’s population became infected with this virus. The number of deaths was estimated to be at least 50 million worldwide with about 675,000 occurring in the United States." https://www.cdc.gov/flu/pandemic-resources/1918-pandemic-h1n1.html
 
-So CFR = 10% ?
+So IFR = 10% ?
 
 But: "The death rate was 25 times higher than in a normal flu epidemic (2.5 per cent compared with 0.1 per cent)" https://www.independent.co.uk/life-style/health-and-families/health-news/flu-how-britain-coped-in-the-1918-epidemic-5348535.html
 
