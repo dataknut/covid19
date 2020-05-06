@@ -1,4 +1,19 @@
 # covid19
+
+## policy network analysis
+
+An attempt to use social network analysis to analyse policy networks:
+
+ * SAGE
+
+## policy media analysis
+
+An attempt to use text mining to analyse press statements and briefings:
+
+ * NZ: Jacinda Ardern/Andrew Bloomfield
+
+## covid19 data
+
 Inevitably, a place to look at covid19 data. 
 
 Best viewed at https://dataknut.github.io/covid19/
