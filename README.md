@@ -1,5 +1,7 @@
 # covid19
 
+Best viewed at https://dataknut.github.io/covid19/ (it's the same content just presented nicely)
+
 ## policy network analysis
 
 An attempt to use social network analysis to analyse policy networks:
@@ -15,8 +17,6 @@ An attempt to use text mining to analyse press statements and briefings:
 ## covid19 data
 
 Inevitably, a place to look at covid19 data. 
-
-Best viewed at https://dataknut.github.io/covid19/
 
  * https://ourworldindata.org/grapher/total-covid-deaths-per-million?tab=chart&year=2020-04-29&country=OWID_WRL+GBR
    * covid19 deaths/million: "our current score of 388 puts (UK/GB?) fourth, behind Belgium (632), Spain (509) and Italy (452)"
