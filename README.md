@@ -22,7 +22,7 @@ But: "The death rate was 25 times higher than in a normal flu epidemic (2.5 per 
  * Spain
    * [eight million](https://www.independent.co.uk/life-style/health-and-families/health-news/flu-how-britain-coped-in-the-1918-epidemic-5348535.html) deaths 
  * GB
-   * Public health interventions? [Yes](https://www.independent.co.uk/life-style/health-and-families/health-news/flu-how-britain-coped-in-the-1918-epidemic-5348535.html) but Bootsma & Ferguson [Section 2 ](https://www.pnas.org/content/pnas/suppl/2007/04/09/0611071104.DC1/11071SIAppendix.pdf) says not.
+   * Public health interventions? [Indy says yes](https://www.independent.co.uk/life-style/health-and-families/health-news/flu-how-britain-coped-in-the-1918-epidemic-5348535.html) but Bootsma & Ferguson [Section 2 ](https://www.pnas.org/content/pnas/suppl/2007/04/09/0611071104.DC1/11071SIAppendix.pdf) says not.
    * [228,000](https://www.historic-uk.com/HistoryUK/HistoryofBritain/The-Spanish-Flu-pandemic-of-1918/) deaths
    * weekly death rate approached 100/100,000 (1/1000 = 0.1%) in some areas (Fig S1 in https://www.pnas.org/content/pnas/suppl/2007/04/09/0611071104.DC1/11071SIAppendix.pdf)
    * total mortality 400-800/100,000 (4-8/1000 0.4%-0.8% c.f. Pākehā in NZ)
