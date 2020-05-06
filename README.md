@@ -30,6 +30,7 @@ But: "The death rate was 25 times higher than in a normal flu epidemic (2.5 per 
    * applying these values to the 2020 UK population of 65 million:
      * 4/1000 (0.4%) -> 260k deaths
      * 8/1000 (0.8%) -> 520k deaths
+     * which is basically what the [Imperial model](https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-9-impact-of-npis-on-covid-19/) with no interventions estimated
    * As of May 5th 2020 UK had seen ~ 29000 covid deaths = 0.04% (but )
  * USA
    * Public health interventions varied by [City & state](https://www.pnas.org/content/104/18/7588 )
