@@ -4,9 +4,12 @@ library(here)
 library(tidyverse)
 library(pdftools)
 
-# help"
+# help:
 # https://www.r-bloggers.com/how-to-extract-data-from-a-pdf-file-with-r/
 # https://www.tidytextmining.com/
+
+# data:
+# https://www.beehive.govt.nz/feature/covid-19-updates
 
 # we have 1 of the NZ press briefings to play withß
 thePDF <- paste0(here::here(), "/data/NZ_0505 PM and DG Press Conference.pdf")
