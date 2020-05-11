@@ -1,0 +1,159 @@
+---
+params:
+  title: ''
+  subtitle: ''
+  authors: ''
+title: '`r params$title`'
+subtitle: '`r params$subtitle`'
+author: '`r params$authors`'
+date: 'Last run at: `r Sys.time()`'
+output:
+  bookdown::html_document2:
+    fig_caption: yes
+    code_folding: hide
+    self_contained: true # set to false if you want plots seperately for easy import to word https://bookdown.org/yihui/rmarkdown/html-document.html#document-dependencies
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+    toc_float: TRUE
+bibliography: '`r path.expand("~/bibliography.bib")`'
+---
+  
+```{r knitrSetUp, include=FALSE}
+
+# Set knitr options
+knitr::opts_chunk$set(echo = FALSE,          # echo code so reader can see what is happening
+                      warning = FALSE,
+                      message = FALSE,
+                      fig_caption = TRUE,
+                      fig_height = 6,        # default, make it bigger to stretch vertical axis
+                      fig_width = 8,
+                      fig_width = 8,         # full width
+                      tidy = TRUE)           # tidy up code in case echo = TRUE
+
+```
+
+
+```{r codeSetup, include=FALSE}
+
+# Load Packages needed only in Rmd ----
+library(kableExtra)
+
+# Adjust knitr options if required
+knitr::opts_chunk$set(echo = TRUE)
+
+# Local parameters ----
+
+# Log compile time:
+myParams$startTime <- proc.time()
+
+```
+
+# About
+
+## Code
+
+Source:
+
+ * https://github.com/dataknut/covid19
+
+History:
+
+ * https://github.com/dataknut/covid19/commits/master
+
+## Comments and feedback
+
+If you wish to comment please open an issue:
+ 
+ * https://github.com/dataknut/covid19/issues
+
+## Citation
+
+If you wish to refer to any of the material from this report please cite as:
+
+ * `r params$authors`, (`r format(Sys.time(), format = "%Y")`) `r params$title`: `r params$subtitle` , [Sustainable Energy Research Group](http://www.energy.soton.ac.uk), University of Southampton: Southampton, UK.
+
+Report circulation:
+
+ * Public
+ 
+This work is (c) `r format(Sys.time(), format = "%Y")` the University of Southampton.
+ 
+# Introduction
+
+An attempt to learn text mining using Boris Johnson's televised address on May 10th 2020.
+
+Data: https://www.gov.uk/government/speeches/pm-address-to-the-nation-on-coronavirus-10-may-2020
+
+Methods draw very heavily on https://www.tidytextmining.com ([Text Mining with R: A Tidy Approach](http://shop.oreilly.com/product/0636920067153.do), Julia Silge and David Robinson, 2020-03-07)
+
+# The data
+
+A [relatively short speech/address](https://www.gov.uk/government/speeches/pm-address-to-the-nation-on-coronavirus-10-may-2020) of `r nrow(df)` sentences outlining the framework for easing UK (actually English) lockdown.
+
+
+```{r dataDesc}
+nWords <- nrow(tidy_df)
+nWordsReduced <- nrow(reduced_df)
+
+kableExtra::kable(head(df), caption = "First 6 sentences") %>%
+  kable_styling()
+```
+
+The address used a total of `r nWords` different words of which `r nWordsReduced` were `non-stopping` words (if, and, the etc)
+
+# Word frequency by postive/negative sentiment
+
+We use the [`bing` sentiment data](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html) to assign `sentiment` (positive vs negative) to each non-stopping word used and calculate the frequency.
+
+Figure \@ref(fig:bingWordCountsPlot) shows the frequency of these words by sentiment.
+
+```{r bingWordCountsPlot, fig.cap="Frequency of words by sentiment"}
+bing_word_countsPlot
+```
+
+Figure \@ref(fig:wordCloudSentimentPlot) shows a word cloud of these words by sentiment.
+
+```{r wordCloudSentimentPlot, fig.cap="Wordcloud of words by sentiment"}
+# for some reson we can't capture this as a plot in the R script?
+wc <- reduced_df %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  reshape2::acast(word ~ sentiment, value.var = "n", fill = 0)
+
+wordcloud::comparison.cloud(wc, colors = c("gray80", "gray20"),
+                   max.words = 100)
+```
+
+# Frequency of sentiment by line
+
+Figure \@ref(fig:sentimentByLinePLot) shows the number of positive/negative words by line (sentence) number. As we can see there are positive words at the very start followed by negative words, then a mix and then a positive finale.
+
+```{r sentimentByLinePLot, fig.cap="Frequency of entiment by line number"}
+sentimentByLinePLot
+```
+
+# Runtime
+
+Report generated using [knitr](https://cran.r-project.org/package=knitr) in [RStudio](http://www.rstudio.com) with `r R.version.string` running on `r R.version$platform` (`r Sys.info()[3]`).
+
+```{r check runtime}
+t <- proc.time() - myParams$startTime
+
+elapsed <- t[[3]]
+```
+
+Analysis completed in `r elapsed` seconds ( `r round(elapsed/60,2)` minutes).
+
+R packages used in this report:
+
+ * data.table - [@data.table]
+ * ggplot2 - [@ggplot2]
+ * here - [@here]
+ * kableExtra - [@kableExtra]
+ * reshape2 - [@reshape2]
+ * tidytext - [@tidytext]
+ * tidyverse - [@tidyverse]
+ * wordcloud - [@wordcloud]
+ 
+# References
