@@ -13,6 +13,8 @@ An attempt to use social network analysis to analyse policy networks:
 An attempt to use text mining to analyse press statements and briefings:
 
  * NZ: Jacinda Ardern/Andrew Bloomfield
+ * UK: 
+   * Boris Johnson [10th May 2020](textMining/textMiner_BJ_v1.html)
 
 ## covid19 data
 
