@@ -147,10 +147,10 @@ Analysis completed in `r elapsed` seconds ( `r round(elapsed/60,2)` minutes).
 
 R packages used in this report:
 
- * data.table - [@data.table]
  * ggplot2 - [@ggplot2]
  * here - [@here]
  * kableExtra - [@kableExtra]
+ * readr = [@readr]
  * reshape2 - [@reshape2]
  * tidytext - [@tidytext]
  * tidyverse - [@tidyverse]
