@@ -28,7 +28,7 @@ doReport <- function(rmd, vers){
   rmarkdown::render(input = rmdFile,
                     params = list(title = myParams$title,
                                   subtitle = myParams$subtitle,
-                                  authors = myParams$authors),
+                                  authors = myParams$authorsYaml),
                     output_file = paste0(here::here(),"/textMining/", # for easy github pages management
                                          myParams$rmd, vers, ".html")
   )
@@ -109,7 +109,8 @@ sentimentByLinePLot <- ggplot2::ggplot(bing_sentiment_counts_by_line, aes(x = li
 # title & subtitle can't have ' in (unless escaped)
 myParams$title <- "Text Mining"
 myParams$subtitle <- "Applying tidytext text mining methods to Boris Johnsons 10th May 2020 address"
-myParams$authors <- "Ben Anderson (b.anderson@soton.ac.uk `@dataknut`)"
+myParams$authorsCite <- "Ben Anderson"
+myParams$authorsYaml <- paste0(myParams$authorsCite, "contact: b.anderson@soton.ac.uk `@dataknut`)")
 
 # myParams$rmd <- "sccAirQualDataExtract" 
 # myParams$subtitle <- "Extracting data for modelling"

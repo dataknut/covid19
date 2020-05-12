@@ -71,7 +71,7 @@ If you wish to comment please open an issue:
 
 If you wish to refer to any of the material from this report please cite as:
 
- * `r params$authors`, (`r format(Sys.time(), format = "%Y")`) `r params$title`: `r params$subtitle` , [Sustainable Energy Research Group](http://www.energy.soton.ac.uk), University of Southampton: Southampton, UK.
+ * `r myParams$authorsCite`, (`r format(Sys.time(), format = "%Y")`) `r params$title`: `r params$subtitle` , [Sustainable Energy Research Group](http://www.energy.soton.ac.uk), University of Southampton: Southampton, UK.
 
 Report circulation:
 
