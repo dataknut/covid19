@@ -3,7 +3,7 @@
 # https://www.tidytextmining.com/
 
 # data:
-# https://www.gov.uk/government/speeches/pm-address-to-the-nation-on-coronavirus-10-may-2020
+theUrl <- "https://www.gov.uk/government/speeches/pm-address-to-the-nation-on-coronavirus-10-may-2020"
 
 
 # Libraries ----
@@ -17,6 +17,22 @@ library(wordcloud)
 myParams <- list()
 
 theFile <- paste0(here::here(), "/data/2020_05_1_BJ_speech.txt")
+
+myParams$plotCap <-paste0("UK Prime Minister Boris Johnson's address 10/05/2020",
+                          "\nSource: ", theUrl,
+                          "\nPlot by: @dataknut")
+
+# Functions ----
+doReport <- function(rmd, vers){
+  rmdFile <- paste0(here::here(), "/textMining/", rmd, ".Rmd")
+  rmarkdown::render(input = rmdFile,
+                    params = list(title = myParams$title,
+                                  subtitle = myParams$subtitle,
+                                  authors = myParams$authors),
+                    output_file = paste0(here::here(),"/textMining/", # for easy github pages management
+                                         myParams$rmd, vers, ".html")
+  )
+}
 
 # Load data ----
 df <- readr::read_delim(theFile, "\n", col_names = c("line"))
@@ -63,7 +79,8 @@ bing_word_countsPlot <- bing_word_counts %>%
   geom_col(show.legend = FALSE) +
   facet_wrap(~sentiment, scales = "free_y") +
   labs(y = "Contribution to sentiment",
-       x = NULL) +
+       x = NULL,
+       caption = myParams$plotCap) +
   coord_flip()
 
 
@@ -80,24 +97,11 @@ sentimentByLinePLot <- ggplot2::ggplot(bing_sentiment_counts_by_line, aes(x = li
   geom_point() +
   theme(legend.position = "bottom") +
   labs(x = "Line/sentence number",
-       y = "Number of words")
+       y = "Number of words",
+       caption = myParams$plotCap)
 
 
 # run the report
-
-# Functions ----
-doReport <- function(rmd, vers){
-  rmdFile <- paste0(here::here(), "/textMining/", rmd, ".Rmd")
-  rmarkdown::render(input = rmdFile,
-                    params = list(title = myParams$title,
-                                  subtitle = myParams$subtitle,
-                                  authors = myParams$authors),
-                    output_file = paste0(here::here(),"/textMining/", # for easy github pages management
-                                         myParams$rmd, vers, ".html")
-  )
-}
-
-
 
 # > settings ----
 
